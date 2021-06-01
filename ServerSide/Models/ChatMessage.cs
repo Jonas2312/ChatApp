@@ -8,20 +8,31 @@ namespace ServerSide.Models
 {
     public class ChatMessage
     {
-        [JsonProperty("user")]
-        public User Author { get; set; }
+        [JsonProperty("author")]
+        public User Author { get; }
         [JsonProperty("content")]
-        public string Content { get; set; }
+        public string Content { get; }
         [JsonProperty("isFile")]
-        public bool IsFile { get; set; }
+        public bool IsFile { get; }
         [JsonProperty("fileID")]
-        public bool FileID { get; set; }
+        public string FileID { get; }
 
 
-        public ChatMessage(User user, string content)
+        //public ChatMessage(User author, string content)
+        //{
+        //    Author = author;
+        //    Content = content;
+        //    IsFile = false;
+        //    FileID = " ";
+        //}
+
+
+        public ChatMessage(User author, string content, bool isFile, string fileID)
         {
-            Author = user;
+            Author = author;
             Content = content;
+            IsFile = isFile;
+            FileID = fileID;
         }
     }
 }

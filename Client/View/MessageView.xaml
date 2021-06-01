@@ -18,11 +18,13 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="{Binding Author.Name}">
+        <TextBlock Grid.Row="0" Text="{Binding Path=Author.Name, StringFormat=\{0\}: }">
 
         </TextBlock>
 
-        <Button Grid.Row="1" Content="Download" Visibility="{Binding Path=isFile, Converter={StaticResource BoolToVisConverter}}">
+        <Button Grid.Row="1" Content="Download" Visibility="{Binding Path=IsFile, Converter={StaticResource BoolToVisConverter}}" 
+                Command="{Binding Path=DataContext.DownloadFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl, AncestorLevel =2}}"
+                CommandParameter="{Binding}">
             
         </Button>
 

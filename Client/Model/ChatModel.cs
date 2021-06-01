@@ -15,6 +15,8 @@ namespace Client.Model
     {
         private static HttpClient client = new HttpClient();
 
+        public static User CurrentUser;
+
         public static async void WriteMessage(ChatMessage message)
         {
             string s = JsonConvert.SerializeObject(message);
@@ -62,18 +64,17 @@ namespace Client.Model
 
         public static async Task<string> LoadMessages()
         {
-            string newText = "";
-
             var v = await client.GetAsync("https://localhost:44339/api/Messages");
             var w = await v.Content.ReadAsStringAsync();
 
             return w;
         }
 
-        public static async void LoadFile(string filePath)
+        public static async void LoadFile(string filePath, ChatMessage message)
         {
             Console.WriteLine("Get files...");
-            var v = await client.GetAsync("https://localhost:44339/api/Files");
+
+            var v = await client.GetAsync("https://localhost:44339/api/Files?fileID=" + message.FileID);            
             var w = await v.Content.ReadAsStreamAsync();
 
             using (Stream file = File.Create(filePath))

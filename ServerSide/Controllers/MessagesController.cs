@@ -16,6 +16,9 @@ namespace ServerSide.Controllers
         // GET: api/Message
         public IEnumerable<ChatMessage> Get()
         {
+            //ChatMessage message = new ChatMessage(new Models.User("server", "password"), "Test message");
+            //MockDatabase.Messages.Add(message);
+
             return MockDatabase.Messages.ToArray();
         }
 

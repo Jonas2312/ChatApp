@@ -15,14 +15,14 @@ namespace ServerSide.Controllers
     public class FilesController : ApiController
     {
         // GET api/values/5
-        public HttpResponseMessage Get()
+        public HttpResponseMessage Get(string fileID)
         {
 
-            string fileName = "TODO.txt";
+            string fileName = fileID;
             string localFilePath;
             int fileSize;
 
-            localFilePath = HttpContext.Current.Server.MapPath("~/uploads") + "/" + fileName;
+            localFilePath = fileName;
 
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StreamContent(new FileStream(localFilePath, FileMode.Open, FileAccess.Read));
@@ -48,7 +48,7 @@ namespace ServerSide.Controllers
                     var fileInfo = streamProvider.FileData.Select(i =>
                     {
                         var info = new FileInfo(i.LocalFileName);
-                        ChatMessage message = new ChatMessage(new Models.User("server", null), "File uploaded as " + info.FullName + "(" + info.Length + ")");
+                        ChatMessage message = new ChatMessage(new Models.User("server", null), "File uploaded as " + info.FullName + "(" + info.Length + ")", true, info.FullName);
                         MockDatabase.Messages.Add(message);
                         return "File uploaded as " + info.FullName + " (" + info.Length + ")";
                     });

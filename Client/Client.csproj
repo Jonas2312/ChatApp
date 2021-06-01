@@ -80,11 +80,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\ChatModel.cs" />
+    <Compile Include="Model\StaticData.cs" />
     <Compile Include="Others\RelayCommand.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\ChatView.xaml.cs">
       <DependentUpon>ChatView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MessageView.xaml.cs">
       <DependentUpon>MessageView.xaml</DependentUpon>
@@ -102,6 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\ChatView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

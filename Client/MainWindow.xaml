@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:Client" xmlns:view="clr-namespace:Client.View"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </Window.Resources>
+    
     <Grid>
-        <view:ChatView></view:ChatView>
+        <view:LoginView Visibility="{Binding Path=DataContext.IsLoggedOff, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisConverter}}"></view:LoginView>
+        <view:ChatView Visibility="{Binding Path=DataContext.IsLoggedIn, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisConverter}}"></view:ChatView>
     </Grid>
 </Window>

@@ -23,13 +23,19 @@ namespace Client.ViewModel
     {
         private DispatcherTimer dispatcherTimer;
         
-        public ObservableCollection<ChatMessage> Messages;
-        public ICommand LoadMessagesCommand;
-        public ICommand WriteMessageCommand;
-        public ICommand UploadFileCommand;
-        public ICommand DownloadFileCommand;
-
-        public User CurrentUser;
+        private ObservableCollection<ChatMessage> messages;
+        public ObservableCollection<ChatMessage> Messages
+        {
+            get
+            {
+                return messages;
+            }
+            set
+            {
+                messages = value;
+                OnPropertyChanged("Messages");
+            }
+        }
 
         private string messageDraft;
         public string MessageDraft
@@ -45,42 +51,51 @@ namespace Client.ViewModel
             }
         }
 
+
+        public ICommand LoadMessagesCommand { get; }
+        public ICommand WriteMessageCommand { get; }
+        public ICommand UploadFileCommand { get; }
+        public ICommand DownloadFileCommand { get; }
+
         public ChatViewModel()
         {
-            LoadMessagesCommand = new RelayCommand(loadMessages);
-            WriteMessageCommand = new RelayCommand(writeMessage);
-            UploadFileCommand = new RelayCommand(uploadFile);
-            DownloadFileCommand = new RelayCommand(downloadFile);
+            Messages = new ObservableCollection<ChatMessage>();
+
+            LoadMessagesCommand = new RelayCommand(LoadMessages);
+            WriteMessageCommand = new RelayCommand(WriteMessage);
+            UploadFileCommand = new RelayCommand(UploadFile);
+            DownloadFileCommand = new RelayCommand(DownloadFile);
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
             dispatcherTimer.Start();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            loadMessages(null);
+            LoadMessages(null);
         }
 
-        private void loadMessages(object obj)
+        private async void LoadMessages(object obj)
         {
-            string loadedMessagesJSON = ChatModel.LoadMessages().Result;
+            string loadedMessagesJSON = await ChatModel.LoadMessages();
             Messages = new ObservableCollection<ChatMessage>(JsonConvert.DeserializeObject<List<ChatMessage>>(loadedMessagesJSON));
+
         }
 
-        private void writeMessage(object obj)
+        private async void WriteMessage(object obj)
         {
             string content = MessageDraft;
             MessageDraft = String.Empty;
 
-            ChatMessage message = new ServerSide.Models.ChatMessage(CurrentUser, content);
+            ChatMessage message = new ServerSide.Models.ChatMessage(ChatModel.CurrentUser, content, false, " ");
             ChatModel.WriteMessage(message);
 
-            loadMessages(null);
+            LoadMessages(null);
         }
 
-        private void uploadFile(object obj)
+        private async void UploadFile(object obj)
         {
             var fileContent = string.Empty;
             var filePath = string.Empty;
@@ -109,8 +124,10 @@ namespace Client.ViewModel
             }
         }
 
-        private void downloadFile(object obj)
+        private async void DownloadFile(object obj)
         {
+            ChatMessage message = (ChatMessage)obj;
+
             Stream myStream;
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
@@ -121,7 +138,7 @@ namespace Client.ViewModel
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                 ChatModel.LoadFile(saveFileDialog1.FileName);
+                 ChatModel.LoadFile(saveFileDialog1.FileName, message);
             }
         }
     }

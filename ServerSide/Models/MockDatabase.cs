@@ -9,6 +9,6 @@ namespace ServerSide.Models
     {
 
         public static List<ChatMessage> Messages = new List<ChatMessage>();
-        public static List<User> User = new List<User>();
+        public static List<User> Users = new List<User>();
     }
 }

@@ -29,7 +29,7 @@ namespace Client.View
         public ChatView()
         {
             _viewModel = new ChatViewModel();
-            DataContext = _viewModel;
+            this.DataContext = _viewModel;
 
             InitializeComponent();
 
