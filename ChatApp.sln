@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{859C9C3B-F571-4773-9406-9DA0A0143F55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{9F907AF6-D70D-4905-BD82-2757BAB56AED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTest", "ClientTest\ClientTest.csproj", "{EB81E163-CB34-49F9-9820-9FDEE7897A51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{859C9C3B-F571-4773-9406-9DA0A0143F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{859C9C3B-F571-4773-9406-9DA0A0143F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{859C9C3B-F571-4773-9406-9DA0A0143F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{859C9C3B-F571-4773-9406-9DA0A0143F55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F907AF6-D70D-4905-BD82-2757BAB56AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F907AF6-D70D-4905-BD82-2757BAB56AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F907AF6-D70D-4905-BD82-2757BAB56AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F907AF6-D70D-4905-BD82-2757BAB56AED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB81E163-CB34-49F9-9820-9FDEE7897A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB81E163-CB34-49F9-9820-9FDEE7897A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB81E163-CB34-49F9-9820-9FDEE7897A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB81E163-CB34-49F9-9820-9FDEE7897A51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A005E457-70B4-45DF-BC3F-751AC288110E}
+	EndGlobalSection
+EndGlobal
