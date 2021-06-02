@@ -79,8 +79,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\ChatModel.cs" />
-    <Compile Include="Model\StaticData.cs" />
+    <Compile Include="Model\REST API\RESTTransferModel.cs" />
+    <Compile Include="Model\IDataTransferModel.cs" />
+    <Compile Include="Model\IFileTransferModel.cs" />
+    <Compile Include="Model\SignalR\SignalRTransferModel.cs" />
+    <Compile Include="Others\Globals.cs" />
+    <Compile Include="Others\Utils.cs" />
     <Compile Include="Others\RelayCommand.cs" />
     <Compile Include="ViewModel\ChatViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />

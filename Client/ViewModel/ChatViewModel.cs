@@ -16,6 +16,7 @@ using System.Windows.Input;
 using Client.Model;
 using System.Windows.Forms;
 using Client.Others;
+using Client.Model.SignalR;
 
 namespace Client.ViewModel
 {
@@ -57,8 +58,20 @@ namespace Client.ViewModel
         public ICommand UploadFileCommand { get; }
         public ICommand DownloadFileCommand { get; }
 
-        public ChatViewModel()
+
+        public IDataTransferModel DataTransferModel;
+        public IFileTransferModel FileTransferModel;
+
+
+        public ChatViewModel() : this(Globals.dataTransferModel, Globals.fileTransferModel)
         {
+        }
+
+        public ChatViewModel(IDataTransferModel dataTransferModel, IFileTransferModel fileTransferModel)
+        {
+            DataTransferModel = dataTransferModel;
+            FileTransferModel = fileTransferModel;
+
             Messages = new ObservableCollection<ChatMessage>();
 
             LoadMessagesCommand = new RelayCommand(LoadMessages);
@@ -68,20 +81,32 @@ namespace Client.ViewModel
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
             dispatcherTimer.Start();
         }
 
+
+
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            LoadMessages(null);
+            // REST API has to ask server periodically if new messages have arrived
+            // Other solutions like using a
+            if (DataTransferModel is RESTTransferModel)
+            {
+                LoadMessages(null);
+            }
+            else if (DataTransferModel is SignalRTransferModel)
+            {
+                
+            }
         }
 
         private async void LoadMessages(object obj)
         {
-            string loadedMessagesJSON = await ChatModel.LoadMessages();
-            Messages = new ObservableCollection<ChatMessage>(JsonConvert.DeserializeObject<List<ChatMessage>>(loadedMessagesJSON));
-
+            List<ChatMessage> MessageList = await DataTransferModel.LoadData<List<ChatMessage>>(Globals.Url + "/api/Messages");
+            if (MessageList == null)
+                return;
+            Messages = new ObservableCollection<ChatMessage>(MessageList);            
         }
 
         private async void WriteMessage(object obj)
@@ -89,8 +114,8 @@ namespace Client.ViewModel
             string content = MessageDraft;
             MessageDraft = String.Empty;
 
-            ChatMessage message = new ServerSide.Models.ChatMessage(ChatModel.CurrentUser, content, false, " ");
-            ChatModel.WriteMessage(message);
+            ChatMessage message = new ServerSide.Models.ChatMessage(Globals.CurrentUser, content, false, " ");
+            DataTransferModel.SendData<ChatMessage>(message, Globals.Url + "/api/Messages");
 
             LoadMessages(null);
         }
@@ -109,17 +134,12 @@ namespace Client.ViewModel
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    //Get the path of specified file
-                    filePath = openFileDialog.FileName;
+                    // Get the path of specified file
+                    // OpenFileDialog.SafeFileName gets the file name and extension for the file selected in
+                    // the dialog box. The file name does not include the path.
 
-                    //Read the contents of the file into a stream
-                    var fileStream = openFileDialog.OpenFile();
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        fileStream.CopyTo(ms);
-                        ChatModel.SetFile(ms.ToArray(), openFileDialog.FileName);
-                    }
+                    filePath = openFileDialog.FileName;                   
+                    FileTransferModel.UploadFile(filePath, openFileDialog.SafeFileName, Globals.Url);
                 }
             }
         }
@@ -138,7 +158,7 @@ namespace Client.ViewModel
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                 ChatModel.LoadFile(saveFileDialog1.FileName, message);
+                 FileTransferModel.DownloadFile(saveFileDialog1.FileName, message.FileID, Globals.Url);
             }
         }
     }

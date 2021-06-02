@@ -17,10 +17,8 @@ namespace ServerSide.Controllers
         // GET api/values/5
         public HttpResponseMessage Get(string fileID)
         {
-
             string fileName = fileID;
             string localFilePath;
-            int fileSize;
 
             localFilePath = fileName;
 
@@ -34,55 +32,35 @@ namespace ServerSide.Controllers
         }
 
         // POST api/values
-        public Task<IEnumerable<string>> Post()
+        public async Task<string> Post()
         {
-            if (Request.Content.IsMimeMultipartContent())
-            {
-                string fullPath = HttpContext.Current.Server.MapPath("~/uploads");
-                MyMultipartFormDataStreamProvider streamProvider = new MyMultipartFormDataStreamProvider(fullPath);
-                var task = Request.Content.ReadAsMultipartAsync(streamProvider).ContinueWith(t =>
-                {
-                    //if (t.IsFaulted || t.IsCanceled)
-                    //    throw new HttpResponseException(HttpStatusCode.InternalServerError);
 
-                    var fileInfo = streamProvider.FileData.Select(i =>
-                    {
-                        var info = new FileInfo(i.LocalFileName);
-                        ChatMessage message = new ChatMessage(new Models.User("server", null), "File uploaded as " + info.FullName + "(" + info.Length + ")", true, info.FullName);
-                        MockDatabase.Messages.Add(message);
-                        return "File uploaded as " + info.FullName + " (" + info.Length + ")";
-                    });
-                    return fileInfo;
+            string fullPath = HttpContext.Current.Server.MapPath("~/uploads");
+            fullPath += "\\" + Request.Content.Headers.ContentDisposition.FileName;
+            Stream fileStream = await Request.Content.ReadAsStreamAsync();
 
-                });
-                return task;
-            }
-            else
+
+            ChatMessage message = new ChatMessage(new Models.User("server", null), "File is being uploaded: " + fullPath, false, fullPath);
+            MockDatabase.Messages.Add(message);
+
+            using (Stream file = File.Create(fullPath))
             {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "Invalid Request!"));
+                CopyStream(fileStream, file);
             }
+
+            message = new ChatMessage(new Models.User("server", null), "File uploaded as " + fullPath, true, fullPath);
+            MockDatabase.Messages.Add(message);
+            return ("File uploaded as " + fullPath);
+
         }
 
-        public class MyMultipartFormDataStreamProvider : MultipartFormDataStreamProvider
+        public static void CopyStream(Stream input, Stream output)
         {
-            public MyMultipartFormDataStreamProvider(string path)
-                : base(path)
+            byte[] buffer = new byte[8 * 1024];
+            int len;
+            while ((len = input.Read(buffer, 0, buffer.Length)) > 0)
             {
-
-            }
-
-            public override string GetLocalFileName(System.Net.Http.Headers.HttpContentHeaders headers)
-            {
-                string fileName;
-                if (!string.IsNullOrWhiteSpace(headers.ContentDisposition.FileName))
-                {
-                    fileName = headers.ContentDisposition.FileName;
-                }
-                else
-                {
-                    fileName = Guid.NewGuid().ToString() + ".data";
-                }
-                return fileName.Replace("\"", string.Empty);
+                output.Write(buffer, 0, len);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Client.ViewModel;
+﻿using Client.Others;
+using Client.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Client
         MainWindowViewModel _viewModel;
         public MainWindow()
         {
-            _viewModel = new MainWindowViewModel();
+            _viewModel = new MainWindowViewModel(false);
             this.DataContext = _viewModel;
 
             InitializeComponent();
