@@ -53,6 +53,21 @@ namespace Client.ViewModel
             }
         }
 
+        private string statusMessage;
+        public string StatusMessage
+        {
+            get
+            {
+                return statusMessage;
+            }
+            set
+            {
+                statusMessage = value;
+                OnPropertyChanged("StatusMessage");
+            }
+        }
+
+
         public ICommand LogInCommand { get; }
         public ICommand RegisterCommand { get; }
 
@@ -89,6 +104,7 @@ namespace Client.ViewModel
                     return;
                 }
             }
+            StatusMessage = "Could not find user";
             Console.WriteLine("Could not find user");
         }
 
@@ -97,7 +113,8 @@ namespace Client.ViewModel
             string logInName = (string)obj;
             User user = new User(logInName, "password");
 
-            DataTransferModel.SendData<User>(user, Globals.Url + "/api/Users");
+            string serverResponse = await DataTransferModel.SendData<User>(user, Globals.Url + "/api/Users");
+            StatusMessage = serverResponse;
         }
     }
 }

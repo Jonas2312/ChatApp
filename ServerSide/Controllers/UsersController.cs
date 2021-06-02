@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ServerSide.Controllers
@@ -24,9 +25,18 @@ namespace ServerSide.Controllers
         }*/
 
         // POST: api/Users
-        public void Post([FromBody]User user)
+        public async Task<string> Post([FromBody]User user)
         {
+            if(user.Name == null || user.Name.Length < 3)
+                return "Did not register user, name too short.";
+            foreach(User u in MockDatabase.Users)
+            {
+                if (user.Name.Equals(u.Name))
+                    return "Did not register user, user already exists.";
+            }
+
             MockDatabase.Users.Add(user);
+            return "Registered user " + user.Name;
         }
 
         // PUT: api/Users/5

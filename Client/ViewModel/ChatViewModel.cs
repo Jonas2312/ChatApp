@@ -79,6 +79,7 @@ namespace Client.ViewModel
             UploadFileCommand = new RelayCommand(UploadFile);
             DownloadFileCommand = new RelayCommand(DownloadFile);
 
+            // For periodic events
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
@@ -90,7 +91,7 @@ namespace Client.ViewModel
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             // REST API has to ask server periodically if new messages have arrived
-            // Other solutions like using a
+            // Other solutions like using SignalR don't
             if (DataTransferModel is RESTTransferModel)
             {
                 LoadMessages(null);
@@ -106,7 +107,11 @@ namespace Client.ViewModel
             List<ChatMessage> MessageList = await DataTransferModel.LoadData<List<ChatMessage>>(Globals.Url + "/api/Messages");
             if (MessageList == null)
                 return;
-            Messages = new ObservableCollection<ChatMessage>(MessageList);            
+
+            // Currently we assume two lists of messages are the same if they contain the same amount of objects
+            // TODO: Check if lists are really the same 
+            if(MessageList.Count != Messages.Count)
+                Messages = new ObservableCollection<ChatMessage>(MessageList);            
         }
 
         private async void WriteMessage(object obj)

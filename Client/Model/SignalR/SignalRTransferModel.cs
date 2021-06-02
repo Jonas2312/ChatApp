@@ -18,12 +18,12 @@ namespace Client.Model.SignalR
             throw new NotImplementedException();
         }
 
-        public void SendData<T>(T data, string url)
+        public void UploadFile(string localFilePath, string remoteFileName, string url)
         {
             throw new NotImplementedException();
         }
 
-        public void UploadFile(string localFilePath, string remoteFileName, string url)
+        public Task<string> SendData<T>(T data, string url)
         {
             throw new NotImplementedException();
         }

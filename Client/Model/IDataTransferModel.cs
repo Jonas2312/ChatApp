@@ -9,6 +9,6 @@ namespace Client.Model
     public interface IDataTransferModel
     {
         Task<T> LoadData<T>(string url);
-        void SendData<T>(T data, string url);
+        Task<string> SendData<T>(T data, string url);
     }
 }

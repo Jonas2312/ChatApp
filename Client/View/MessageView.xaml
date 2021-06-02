@@ -8,9 +8,14 @@
              Height="50" Width="620"
              d:DesignHeight="50" d:DesignWidth="620">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StandardResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid>
         
         <Grid.RowDefinitions>
@@ -27,7 +32,7 @@
 
         </TextBlock>
 
-        <Button Height="50" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="Download" Visibility="{Binding Path=IsFile, Converter={StaticResource BoolToVisConverter}}" 
+        <Button Style="{StaticResource DarkButton}" Height="20" Width="60" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="Download" Visibility="{Binding Path=IsFile, Converter={StaticResource BoolToVisConverter}}" 
                 Command="{Binding Path=DataContext.DownloadFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType = UserControl, AncestorLevel =2}}"
                 CommandParameter="{Binding}">
             

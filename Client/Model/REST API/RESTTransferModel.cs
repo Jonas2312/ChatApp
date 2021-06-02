@@ -27,7 +27,12 @@ namespace Client.Model
             HttpClient = httpClient;
         }
 
-            
+        /// <summary>
+        /// Recieves Data from url. Objects of type T are being expected to be recieved in json-format and deserializable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <returns></returns>        
         public async Task<T> LoadData<T>(string url)
         {
             var responseMessage = await HttpClient.GetAsync(url);
@@ -37,25 +42,38 @@ namespace Client.Model
             return data;
         }
 
-
-        public async void SendData<T>(T data, string url)
+        /// <summary>
+        /// Send data to url. Data has to be of json-serializable Object type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public async Task<string> SendData<T>(T data, string url)
         {
             string s = JsonConvert.SerializeObject(data);
             using (var stringContent = new StringContent(s, System.Text.Encoding.UTF8, "application/json"))
             {
                 try
                 {
-                    var response = await HttpClient.PostAsync(url, stringContent);
-                    var result = await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage response = await HttpClient.PostAsync(url, stringContent);
+                    string result = await response.Content.ReadAsStringAsync();
+                    return result;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
             }
+            return "Could not get a result from server";
         }
 
-
+        /// <summary>
+        /// Uses content property of HttpResponseMessage to recieve files from [url + "/api/Files"]
+        /// </summary>
+        /// <param name="localFilePath"></param>
+        /// <param name="remoteFileName"></param>
+        /// <param name="url"></param>
         public async void DownloadFile(string localFilePath, string remoteFileName, string url)
         {
             HttpResponseMessage response = await HttpClient.GetAsync(url + "/api/Files?fileID=" + remoteFileName);
@@ -67,7 +85,12 @@ namespace Client.Model
             }
         }
 
-
+        /// <summary>
+        /// Uses content property of HttpResponseMessage to send files to [url + "/api/Files"]
+        /// </summary>
+        /// <param name="localFilePath"></param>
+        /// <param name="remoteFileName"></param>
+        /// <param name="url"></param>
         public async void UploadFile(string localFilePath, string remoteFileName, string url)
         {
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
