@@ -1,7 +1,8 @@
 ﻿using Client.Model;
 using Client.Others;
 using Newtonsoft.Json;
-using ServerSide.Models;
+using Domain.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -75,7 +76,7 @@ namespace Client.ViewModel
         public IDataTransferModel DataTransferModel;
 
         
-        public MainWindowViewModel(bool isLoggedIn) : this(Globals.dataTransferModel, isLoggedIn)
+        public MainWindowViewModel(bool isLoggedIn) : this(Globals.UserDataTransferModel, isLoggedIn)
         {
         }
 

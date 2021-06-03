@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ServerSide.Models;
+using Domain.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,20 @@ namespace Client.ViewModel
         }
 
 
+        private string statusMessage;
+        public string StatusMessage
+        {
+            get
+            {
+                return statusMessage;
+            }
+            set
+            {
+                statusMessage = value;
+                OnPropertyChanged("StatusMessage");
+            }
+        }
+
         public ICommand LoadMessagesCommand { get; }
         public ICommand WriteMessageCommand { get; }
         public ICommand UploadFileCommand { get; }
@@ -63,7 +78,7 @@ namespace Client.ViewModel
         public IFileTransferModel FileTransferModel;
 
 
-        public ChatViewModel() : this(Globals.dataTransferModel, Globals.fileTransferModel)
+        public ChatViewModel() : this(Globals.MessageDataTransferModel, Globals.FileTransferModel)
         {
         }
 
@@ -80,26 +95,31 @@ namespace Client.ViewModel
             DownloadFileCommand = new RelayCommand(DownloadFile);
 
             // For periodic events
-            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
-            dispatcherTimer.Start();
-        }
-
-
-
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
-        {
             // REST API has to ask server periodically if new messages have arrived
             // Other solutions like using SignalR don't
             if (DataTransferModel is RESTTransferModel)
             {
-                LoadMessages(null);
+                dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+                dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 2500);
+                dispatcherTimer.Start();
             }
             else if (DataTransferModel is SignalRTransferModel)
             {
+                SignalRTransferModel stm = (SignalRTransferModel)DataTransferModel;
+                stm.RecievedMessage += Stm_RecievedMessage;
                 
             }
+        }
+
+        private void Stm_RecievedMessage(ChatMessage message)
+        {
+            Messages.Add(message);
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            LoadMessages(null);
         }
 
         private async void LoadMessages(object obj)
@@ -119,10 +139,8 @@ namespace Client.ViewModel
             string content = MessageDraft;
             MessageDraft = String.Empty;
 
-            ChatMessage message = new ServerSide.Models.ChatMessage(Globals.CurrentUser, content, false, " ");
-            DataTransferModel.SendData<ChatMessage>(message, Globals.Url + "/api/Messages");
-
-            LoadMessages(null);
+            ChatMessage message = new ChatMessage(Globals.CurrentUser, content, false, "empty");
+            StatusMessage = await DataTransferModel.SendData<ChatMessage>(message, Globals.Url + "/api/Messages");
         }
 
         private async void UploadFile(object obj)
@@ -165,6 +183,8 @@ namespace Client.ViewModel
             {
                  FileTransferModel.DownloadFile(saveFileDialog1.FileName, message.FileID, Globals.Url);
             }
+
+            StatusMessage = "Downloaded File.";
         }
     }
 }

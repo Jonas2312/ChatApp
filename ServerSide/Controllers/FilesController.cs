@@ -1,4 +1,6 @@
-﻿using ServerSide.Models;
+﻿using Domain.Models;
+using ServerSide.Models;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +42,7 @@ namespace ServerSide.Controllers
             Stream fileStream = await Request.Content.ReadAsStreamAsync();
 
 
-            ChatMessage message = new ChatMessage(new Models.User("server", null), "File is being uploaded: " + fullPath, false, fullPath);
+            ChatMessage message = new ChatMessage(new User("server", null), "File is being uploaded: " + fullPath, false, fullPath);
             MockDatabase.Messages.Add(message);
 
             using (Stream file = File.Create(fullPath))
@@ -48,7 +50,7 @@ namespace ServerSide.Controllers
                 CopyStream(fileStream, file);
             }
 
-            message = new ChatMessage(new Models.User("server", null), "File uploaded as " + fullPath, true, fullPath);
+            message = new ChatMessage(new User("server", null), "File uploaded as " + fullPath, true, fullPath);
             MockDatabase.Messages.Add(message);
             return ("File uploaded as " + fullPath);
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ServerSide.Models
+namespace Domain.Models
 {
     public class User
     {

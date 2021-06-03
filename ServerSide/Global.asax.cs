@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerSide.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,6 +22,8 @@ namespace ServerSide
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+
+            MockDatabase.FillDatabase();
         }
 
     }

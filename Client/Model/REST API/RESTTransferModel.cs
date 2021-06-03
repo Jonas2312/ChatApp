@@ -35,8 +35,9 @@ namespace Client.Model
         /// <returns></returns>        
         public async Task<T> LoadData<T>(string url)
         {
-            var responseMessage = await HttpClient.GetAsync(url);
-            var loadedJSON = await responseMessage.Content.ReadAsStringAsync();
+            var responseMessage = await HttpClient.GetAsync(url).ConfigureAwait(false);
+            var loadedJSON = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
             T data = JsonConvert.DeserializeObject<T>(loadedJSON);
 
             return data;
@@ -52,12 +53,13 @@ namespace Client.Model
         public async Task<string> SendData<T>(T data, string url)
         {
             string s = JsonConvert.SerializeObject(data);
+            Console.WriteLine(s);
             using (var stringContent = new StringContent(s, System.Text.Encoding.UTF8, "application/json"))
             {
                 try
                 {
-                    HttpResponseMessage response = await HttpClient.PostAsync(url, stringContent);
-                    string result = await response.Content.ReadAsStringAsync();
+                    HttpResponseMessage response = await HttpClient.PostAsync(url, stringContent).ConfigureAwait(false);
+                    string result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     return result;
                 }
                 catch (Exception e)
@@ -76,8 +78,8 @@ namespace Client.Model
         /// <param name="url"></param>
         public async void DownloadFile(string localFilePath, string remoteFileName, string url)
         {
-            HttpResponseMessage response = await HttpClient.GetAsync(url + "/api/Files?fileID=" + remoteFileName);
-            Stream fileStream = await response.Content.ReadAsStreamAsync();
+            HttpResponseMessage response = await HttpClient.GetAsync(url + "/api/Files?fileID=" + remoteFileName).ConfigureAwait(false);
+            Stream fileStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
             using (Stream file = File.Create(localFilePath))
             {
@@ -99,7 +101,7 @@ namespace Client.Model
             response.Content.Headers.ContentDisposition.FileName = remoteFileName;
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
 
-            await HttpClient.PostAsync(url + "/api/Files", response.Content);
+            await HttpClient.PostAsync(url + "/api/Files", response.Content).ConfigureAwait(false);
         }
 
 

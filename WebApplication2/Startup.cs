@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+using WebApplication2.Hubs;
 
 namespace WebApplication2
 {
@@ -26,6 +28,7 @@ namespace WebApplication2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSignalR();
             services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
@@ -46,6 +49,7 @@ namespace WebApplication2
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
             });
 
             app.UseMvc();

@@ -1,5 +1,7 @@
 ﻿using Client.Model;
-using ServerSide.Models;
+using Client.Model.SignalR;
+using Domain.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +27,19 @@ namespace Client.Others
         }
 
 
-        public static IDataTransferModel dataTransferModel = new RESTTransferModel();
-        public static IFileTransferModel fileTransferModel = new RESTTransferModel();
+        public static string Url = "https://localhost:44336";
 
-        public static string Url = "https://localhost:44339/";
+        public static IDataTransferModel UserDataTransferModel;
+        public static IDataTransferModel MessageDataTransferModel;
+        public static IFileTransferModel FileTransferModel;
+
+        public static void Init()
+        {
+            UserDataTransferModel = new RESTTransferModel();
+            MessageDataTransferModel = new SignalRTransferModel(Url + "/chat");
+            FileTransferModel = new RESTTransferModel();
+        }
+    
+
     }
 }

@@ -25,6 +25,8 @@ namespace Client
         MainWindowViewModel _viewModel;
         public MainWindow()
         {
+            Globals.Init();
+
             _viewModel = new MainWindowViewModel(false);
             this.DataContext = _viewModel;
 

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Models;
+using System.Threading.Tasks;
 
 namespace WebApplication2.Controllers
 {
@@ -12,11 +14,12 @@ namespace WebApplication2.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+
         [HttpGet]
         // GET: api/Users
-        public IEnumerable<User> Get()
+        public List<User> Get()
         {
-            return MockDatabase.Users.ToArray();
+            return MockDatabase.Users;
         }
 
         // GET: api/Users/5
@@ -28,11 +31,19 @@ namespace WebApplication2.Controllers
 
         // POST: api/Users
         [HttpPost]
-        public void Post([FromBody]User user)
+        public async Task<string> Post([FromBody]User user)
         {
-            MockDatabase.Users.Add(user);
-        }
+            if (user.Name == null || user.Name.Length < 3)
+                return "Did not register user, name too short.";
+            foreach (User u in MockDatabase.Users)
+            {
+                if (user.Name.Equals(u.Name))
+                    return "Did not register user, user already exists.";
+            }
 
+            MockDatabase.Users.Add(user);
+            return "Registered user " + user.Name;
+        }
         // PUT: api/Users/5
         /*
         public void Put(int id, [FromBody]string value)

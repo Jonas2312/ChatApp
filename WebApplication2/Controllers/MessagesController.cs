@@ -5,21 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
+using Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace WebApplication2.Controllers
 {
-    public class MessagesController : ApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MessagesController : ControllerBase
     {
 
 
         // GET: api/Message
-        public IEnumerable<ChatMessage> Get()
+        [HttpGet]
+        public List<ChatMessage> Get()
         {
             //ChatMessage message = new ChatMessage(new Models.User("server", "password"), "Test message");
             //MockDatabase.Messages.Add(message);
 
-            return MockDatabase.Messages.ToArray();
+            return MockDatabase.Messages;
         }
 
         // GET: api/Message/5
@@ -30,9 +35,11 @@ namespace WebApplication2.Controllers
         }*/
 
         // POST: api/Message
-        public void Post([FromBody]ChatMessage message)
+        [HttpPost]
+        public async Task<string> Post([FromBody]ChatMessage message)
         {
             MockDatabase.Messages.Add(message);
+            return "Message recieved.";
         }
 
         // PUT: api/Message/5

@@ -20,7 +20,7 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
             
         </Button>
 
-        <TextBlock Grid.Row="2" Text="{Binding Content}">
+        <TextBlock Grid.Row="2" Text="{Binding Content}" TextWrapping="Wrap">
 
         </TextBlock>
 

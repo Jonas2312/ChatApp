@@ -2,10 +2,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SimpleInjector.Integration.Web.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
+using WebApplication2.Models;
+
 
 namespace WebApplication2
 {
@@ -13,7 +17,9 @@ namespace WebApplication2
     {
         public static void Main(string[] args)
         {
+            MockDatabase.FillDatabase();
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

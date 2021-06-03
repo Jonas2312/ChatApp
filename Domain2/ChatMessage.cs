@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ServerSide.Models
+namespace Domain.Models
 {
     public class ChatMessage
     {
         [JsonProperty("author")]
-        public User Author { get; }
+        public User Author { get; set; }
         [JsonProperty("content")]
-        public string Content { get; }
+        public string Content { get; set; }
         [JsonProperty("isFile")]
-        public bool IsFile { get; }
+        public bool IsFile { get; set; }
         [JsonProperty("fileID")]
-        public string FileID { get; }
+        public string FileID { get; set; }
 
 
         //public ChatMessage(User author, string content)
@@ -26,13 +26,21 @@ namespace ServerSide.Models
         //    FileID = " ";
         //}
 
-
+        [JsonConstructor]
         public ChatMessage(User author, string content, bool isFile, string fileID)
         {
             Author = author;
             Content = content;
             IsFile = isFile;
             FileID = fileID;
+        }
+
+        public ChatMessage()
+        {
+            Author = new User("ParamterelessUser", "Parameterless Password");
+            Content = "Parameterless Content";
+            IsFile = false;
+            FileID = "Parameterless FileID";
         }
     }
 }
