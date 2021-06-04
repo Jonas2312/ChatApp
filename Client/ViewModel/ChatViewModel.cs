@@ -17,7 +17,6 @@ using System.Windows.Input;
 using Client.Model;
 using System.Windows.Forms;
 using Client.Others;
-using Client.Model.SignalR;
 
 namespace Client.ViewModel
 {
@@ -101,7 +100,7 @@ namespace Client.ViewModel
             {
                 dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
                 dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-                dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 2500);
+                dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000);
                 dispatcherTimer.Start();
             }
             else if (DataTransferModel is SignalRTransferModel)

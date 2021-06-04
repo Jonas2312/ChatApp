@@ -19,8 +19,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="300"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
@@ -50,11 +52,11 @@
             </ListView>
         </ScrollViewer>
         
-        <TextBox Grid.Row="1" Text="{Binding MessageDraft}"></TextBox>
-        <Button Grid.Row="2" Content="Send Message" Command="{Binding WriteMessageCommand}"></Button>
+        <TextBox Grid.Row="2" Text="{Binding MessageDraft}"></TextBox>
+        <Button Grid.Row="3" Content="Send Message" Command="{Binding WriteMessageCommand}"></Button>
 
-        <Button Style="{StaticResource FancyButton}" Grid.Column="0" Grid.Row="3" Content="UploadFile" Command="{Binding UploadFileCommand}"></Button>
+        <Button Style="{StaticResource FancyButton}" Grid.Column="0" Grid.Row="5" Content="UploadFile" Command="{Binding UploadFileCommand}"></Button>
 
-        <TextBlock Grid.Row="5"  Text="{Binding StatusMessage}"></TextBlock>
+        <TextBlock Grid.Row="6"  Text="{Binding StatusMessage}"></TextBlock>
     </Grid>
 </UserControl>

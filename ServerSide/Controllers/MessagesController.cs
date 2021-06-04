@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using ServerSide.Models;
 using Domain.Models;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

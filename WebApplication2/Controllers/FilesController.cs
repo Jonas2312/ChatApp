@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using WebApplication2.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +14,7 @@ using System.Web.Http.Results;
 using System.Web.Http;
 using WebApplication2.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Primitives;
 
 namespace WebApplication2.Controllers
 {
@@ -44,13 +44,17 @@ namespace WebApplication2.Controllers
         public async Task<string> Post()
         {
             string fullPath = System.IO.Directory.GetCurrentDirectory();//HttpContext.Current.Server.MapPath("~/uploads");
-            fullPath += "\\" + "Testfile.txt";
 
+            StringValues v;
+            Request.Headers.TryGetValue("Content-Disposition", out v);
+            string fileName = v.ToArray()[0].Split("; filename=")[1];
 
+            fullPath += "\\" + fileName;
+            
             ChatMessage message = new ChatMessage(new User("server", null), "File is being uploaded: " + fullPath, false, fullPath);
-
             MockDatabase.Messages.Add(message);
             await _hubContext.Clients.All.SendAsync("RecieveChatMessage", message);
+                                
 
             using (Stream file = System.IO.File.Create(fullPath))
             {

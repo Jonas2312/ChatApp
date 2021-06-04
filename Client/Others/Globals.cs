@@ -1,5 +1,4 @@
 ﻿using Client.Model;
-using Client.Model.SignalR;
 using Domain.Models;
 
 using System;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Client.Others
 {
-    public static class Globals
+    public abstract class Globals
     {
         private static User currentUser;
         public static User CurrentUser
@@ -27,19 +26,11 @@ namespace Client.Others
         }
 
 
-        public static string Url = "https://localhost:44336";
+        public static string Url;
 
         public static IDataTransferModel UserDataTransferModel;
         public static IDataTransferModel MessageDataTransferModel;
-        public static IFileTransferModel FileTransferModel;
-
-        public static void Init()
-        {
-            UserDataTransferModel = new RESTTransferModel();
-            MessageDataTransferModel = new SignalRTransferModel(Url + "/chat");
-            FileTransferModel = new RESTTransferModel();
-        }
-    
+        public static IFileTransferModel FileTransferModel;      
 
     }
 }

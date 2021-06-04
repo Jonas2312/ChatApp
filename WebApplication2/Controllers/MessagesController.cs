@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using WebApplication2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +20,6 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public List<ChatMessage> Get()
         {
-            //ChatMessage message = new ChatMessage(new Models.User("server", "password"), "Test message");
-            //MockDatabase.Messages.Add(message);
-
             return MockDatabase.Messages;
         }
 

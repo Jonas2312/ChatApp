@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Model.SignalR
+namespace Client.Model
 {
     class SignalRTransferModel : IDataTransferModel
     {
@@ -34,12 +34,7 @@ namespace Client.Model.SignalR
 
         public async Task<T> LoadData<T>(string url)
         {
-            var responseMessage = await HttpClient.GetAsync(url).ConfigureAwait(false);
-            var loadedJSON = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            T data = JsonConvert.DeserializeObject<T>(loadedJSON);
-
-            return data;
+            return default(T);
         }
 
 

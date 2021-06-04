@@ -109,9 +109,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServerSide\ServerSide.csproj">
+    <ProjectReference Include="..\ServerSide\RESTAPIServer.csproj">
       <Project>{384F371C-2790-4E4F-8859-C66FF9FF03B8}</Project>
-      <Name>ServerSide</Name>
+      <Name>RESTAPIServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
 ﻿using Client.Others;
+using Client.Others.Global_Settings;
 using Client.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Client
         MainWindowViewModel _viewModel;
         public MainWindow()
         {
-            Globals.Init();
+            Server1Settings.Init();
 
             _viewModel = new MainWindowViewModel(false);
             this.DataContext = _viewModel;
